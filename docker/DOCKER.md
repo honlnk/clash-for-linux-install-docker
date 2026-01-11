@@ -2,12 +2,52 @@
 
 本文档介绍如何使用 Docker 部署 clash-for-linux-install 项目。
 
+## 前置准备
+
+### 获取项目代码
+
+如果你还没有项目代码,需要先克隆仓库。本项目提供了多种克隆方式:
+
+**方式一: 使用 Gitee 镜像 (推荐国内用户)**
+
+如果你的服务器在国内,建议使用 Gitee 镜像仓库以获得更快的下载速度:
+
+```bash
+git clone --branch master --depth 1 https://gitee.com/honlnk/clash-for-linux-install-docker.git
+cd clash-for-linux-install-docker/docker
+```
+
+**方式二: 使用 GitHub 加速代理**
+
+如果你必须使用 GitHub,可以使用加速代理:
+
+```bash
+git clone --branch master --depth 1 https://gh-proxy.org/https://github.com/nelvko/clash-for-linux-install.git
+cd clash-for-linux-install/docker
+```
+
+**方式三: 直接克隆 GitHub (需要良好的网络环境)**
+
+```bash
+git clone --branch master --depth 1 https://github.com/nelvko/clash-for-linux-install.git
+cd clash-for-linux-install/docker
+```
+
+> 💡 **提示**:
+> - 使用 `--depth 1` 只克隆最新提交,减小下载体积
+> - Gitee 镜像仓库与 GitHub 内容完全一致,可放心使用
+
 ## 快速开始
 
 ### 方式一: 使用 docker-compose (推荐)
 
+**执行目录**: `项目根目录/docker/`
+
 1. **配置环境变量** (可选)
 ```bash
+# 进入 docker 目录
+cd docker
+
 # 方式1: 直接在 docker-compose.yml 中修改
 # 方式2: 使用环境变量文件
 cp .docker.env.example .env
@@ -17,6 +57,7 @@ cp .docker.env.example .env
 
 2. **构建并启动**
 ```bash
+# 在 docker 目录下执行
 docker-compose up -d
 ```
 
@@ -32,8 +73,11 @@ http://localhost:9090/ui
 
 ### 方式二: 使用 Docker 命令
 
+**执行目录**: `项目根目录`
+
 1. **构建镜像**
 ```bash
+# 在项目根目录下执行
 docker build -f docker/Dockerfile -t clash-for-linux:latest .
 ```
 
@@ -60,6 +104,8 @@ docker logs clash
 
 ## 配置说明
 
+> **注意**: 以下配置如使用 docker-compose,在 `项目根目录/docker/` 下操作;如使用 Docker 命令,在 `项目根目录` 下操作。
+
 ### 环境变量
 
 | 变量名 | 说明 | 默认值 |
@@ -85,6 +131,8 @@ docker logs clash
 - `NET_RAW` - 网络原始套接字权限
 
 ## 常用操作
+
+> **目录说明**: 以下命令默认在任意目录执行,因为使用的是 `docker exec` 操作已运行的容器。
 
 ### 添加订阅
 
@@ -201,6 +249,8 @@ network_mode: host
 
 ## 容器管理命令
 
+> **执行目录**: `项目根目录/docker/` (使用 docker-compose 时)
+
 ### 启动/停止/重启
 
 ```bash
@@ -241,6 +291,8 @@ docker rmi clash-for-linux:latest
 ```
 
 ## 故障排查
+
+> **目录说明**: 以下命令可在任意目录执行。
 
 ### 容器无法启动
 
@@ -293,9 +345,12 @@ docker exec clash curl -I http://www.google.com
 
 ## 高级配置
 
+> **执行目录**: `项目根目录` (使用 docker run 命令时)
+
 ### 使用本地配置文件
 
 ```bash
+# 在项目根目录下执行
 # 挂载本地配置
 docker run -d \
   --name clash \
@@ -338,6 +393,8 @@ docker run -d \
 ```
 
 ## 安全建议
+
+> **目录说明**: 以下命令可在任意目录执行。
 
 1. **设置 Web 访问密钥**
 ```bash
