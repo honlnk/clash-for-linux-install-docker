@@ -11,6 +11,9 @@
   "docker/docker-start.sh": {
     "description": "Docker 快速启动脚本(自动兼容V1/V2)"
   },
+  "docker/docker-configure-mirror.sh": {
+    "description": "Docker 镜像加速器配置脚本(解决国内拉取镜像慢的问题)"
+  },
   "docker/.dockerignore": {
     "description": "Docker 构建忽略文件"
   },

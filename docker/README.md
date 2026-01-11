@@ -49,6 +49,9 @@ cd clash-for-linux-install/docker
 - **docker-start.sh** - ⭐ 快速启动脚本 (用户在宿主机上运行)
   - 作用: 检查环境、构建镜像、启动容器
   - 使用: `./docker-start.sh`
+- **docker-configure-mirror.sh** - Docker 镜像加速器配置脚本
+  - 作用: 配置国内 Docker 镜像加速器,解决拉取镜像慢的问题
+  - 使用: `./docker-configure-mirror.sh`
 - **docker-entrypoint.sh** - 容器入口脚本 (容器内部自动执行)
   - 作用: 初始化配置、启动 Clash、保持容器运行
   - 执行: Docker 启动容器时自动调用
@@ -68,6 +71,27 @@ cd clash-for-linux-install/docker
 > - 如果你看到 `Command 'docker-compose' not found`,说明你使用的是 V2 (推荐)
 > - 命令对照: `docker-compose` (V1) → `docker compose` (V2)
 > - 详细说明请参考: [Docker Compose 版本说明](DOCKER_COMPOSE_VERSION.md)
+
+> ⚠️ **国内用户重要提示**: 如果你在中国大陆,首次构建镜像时可能会遇到网络超时问题:
+> ```
+> failed to solve: DeadlineExceeded: ubuntu:22.04: failed to resolve source metadata
+> ```
+>
+> **解决方案** (二选一):
+>
+> **方式一: 配置 Docker 镜像加速器** (推荐)
+> ```bash
+> # 在 docker/ 目录下执行
+> ./docker-configure-mirror.sh
+> ```
+>
+> **方式二: 先配置代理,再构建**
+> ```bash
+> # 如果已有其他代理工具
+> export http_proxy=http://your-proxy:port
+> export https_proxy=http://your-proxy:port
+> ./docker-start.sh
+> ```
 
 ### 方式一: 使用快速启动脚本 (⭐ 最推荐)
 

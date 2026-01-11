@@ -73,6 +73,18 @@ cd clash-for-linux-install/docker
 
 ## 快速开始
 
+> ⚠️ **国内用户重要提示**: 如果你在中国大陆,首次构建镜像时可能会遇到网络超时问题:
+> ```
+> failed to solve: DeadlineExceeded: ubuntu:22.04: failed to resolve source metadata
+> ```
+>
+> **解决方案**: 先配置 Docker 镜像加速器:
+> ```bash
+> # 在 docker/ 目录下执行
+> ./docker-configure-mirror.sh
+> ```
+> 配置完成后重新运行启动脚本即可。
+
 ### 方式一: 使用快速启动脚本 (⭐ 最推荐)
 
 **为什么推荐这种方式?**
