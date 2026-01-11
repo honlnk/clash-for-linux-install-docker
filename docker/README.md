@@ -81,8 +81,8 @@ cd clash-for-linux-install/docker
 > - ⚠️ 如果网络受限 → 自动切换到 `docker-compose.china.yml`(国内优化版)
 >
 > **国内优化版**特点:
-> - 使用阿里云 Ubuntu 基础镜像
-> - 使用阿里云 APT 软件源
+> - 使用网易公开 Ubuntu 基础镜像(无需登录)
+> - 使用中科大 APT 软件源
 > - 自动配置 GitHub 代理加速下载
 >
 > 如果自动检测失败,你仍然遇到网络问题,可以:

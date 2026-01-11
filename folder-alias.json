@@ -3,7 +3,7 @@
     "description": "Docker 镜像构建文件(标准版)"
   },
   "docker/Dockerfile.china": {
-    "description": "Docker 镜像构建文件(国内网络优化版,使用阿里云镜像)"
+    "description": "Docker 镜像构建文件(国内网络优化版,使用网易镜像和中科大软件源)"
   },
   "docker/docker-compose.yml": {
     "description": "Docker Compose 编排配置(标准版)"
