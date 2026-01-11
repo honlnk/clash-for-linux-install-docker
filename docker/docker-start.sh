@@ -13,6 +13,7 @@ NC='\033[0m' # No Color
 
 # 全局变量
 COMPOSE_FILE=""
+SUDO=""
 
 # 打印带颜色的消息
 print_info() {
@@ -43,28 +44,9 @@ detect_network_env() {
     else
         print_warn "⚠️  国际网络受限,将使用国内镜像优化版本"
         COMPOSE_FILE="docker-compose.china.yml"
-        return 1
+        return 0  # 改为返回 0,避免 set -e 导致脚本退出
     fi
 }
-
-# 检测是否需要 sudo
-SUDO=""
-if ! docker info &> /dev/null; then
-    if sudo -n docker info &> /dev/null 2>&1; then
-        print_warn "当前用户没有 docker 权限,将自动使用 sudo"
-        SUDO="sudo"
-    else
-        print_error "当前用户没有 docker 权限,且无法自动使用 sudo"
-        echo ""
-        echo "请选择以下方式之一:"
-        echo "  1. 使用 sudo 运行此脚本: sudo $0"
-        echo "  2. 将当前用户添加到 docker 组:"
-        echo "     sudo usermod -aG docker \$USER"
-        echo "     newgrp docker  # 或重新登录"
-        echo ""
-        exit 1
-    fi
-fi
 
 # 检查 Docker 是否安装
 check_docker() {
@@ -180,7 +162,25 @@ main() {
     echo "😼 Clash Docker 快速启动脚本"
     echo ""
 
-    detect_network_env
+    # 检测是否需要 sudo (放在 main 函数开头)
+    if ! docker info &> /dev/null 2>&1; then
+        if sudo -n docker info &> /dev/null 2>&1; then
+            print_warn "当前用户没有 docker 权限,将自动使用 sudo"
+            SUDO="sudo"
+        else
+            print_error "当前用户没有 docker 权限,且无法自动使用 sudo"
+            echo ""
+            echo "请选择以下方式之一:"
+            echo "  1. 使用 sudo 运行此脚本: sudo $0"
+            echo "  2. 将当前用户添加到 docker 组:"
+            echo "     sudo usermod -aG docker \$USER"
+            echo "     newgrp docker  # 或重新登录"
+            echo ""
+            exit 1
+        fi
+    fi
+
+    detect_network_env || true  # || true 确保即使返回非0也不会退出
     check_docker
     check_docker_compose
     build_image
