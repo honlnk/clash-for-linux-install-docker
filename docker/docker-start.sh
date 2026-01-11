@@ -23,11 +23,30 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# 检测是否需要 sudo
+SUDO=""
+if ! docker info &> /dev/null; then
+    if sudo -n docker info &> /dev/null 2>&1; then
+        print_warn "当前用户没有 docker 权限,将自动使用 sudo"
+        SUDO="sudo"
+    else
+        print_error "当前用户没有 docker 权限,且无法自动使用 sudo"
+        echo ""
+        echo "请选择以下方式之一:"
+        echo "  1. 使用 sudo 运行此脚本: sudo $0"
+        echo "  2. 将当前用户添加到 docker 组:"
+        echo "     sudo usermod -aG docker \$USER"
+        echo "     newgrp docker  # 或重新登录"
+        echo ""
+        exit 1
+    fi
+fi
+
 # 检查 Docker 是否安装
 check_docker() {
     if ! command -v docker &> /dev/null; then
         print_error "Docker 未安装,请先安装 Docker"
-        echo "访问 https://docs.docker.com/get-docker/ 获取安装指南"
+        echo "访问 docker/DOCKER_INSTALL.md 查看安装指南"
         exit 1
     fi
     print_info "Docker 已安装: $(docker --version)"
@@ -46,10 +65,10 @@ check_docker_compose() {
 # 构建镜像
 build_image() {
     print_info "开始构建 Docker 镜像..."
-    if docker compose version &> /dev/null; then
-        docker compose build
+    if $SUDO docker compose version &> /dev/null; then
+        $SUDO docker compose build
     else
-        docker-compose build
+        $SUDO docker-compose build
     fi
     print_info "镜像构建完成"
 }
@@ -66,10 +85,10 @@ start_container() {
         print_info "提示: export CLASH_CONFIG_URL=http://your-url && ./docker-start.sh"
     fi
 
-    if docker compose version &> /dev/null; then
-        docker compose up -d
+    if $SUDO docker compose version &> /dev/null; then
+        $SUDO docker compose up -d
     else
-        docker-compose up -d
+        $SUDO docker-compose up -d
     fi
 
     print_info "容器启动成功"
