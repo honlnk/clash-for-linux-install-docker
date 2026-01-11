@@ -2,6 +2,23 @@
 
 本文档介绍如何使用 Docker 部署 clash-for-linux-install 项目。
 
+## 📝 关于 Docker Compose 版本
+
+> **重要**: 本文档使用 **Docker Compose V2** 语法 (`docker compose`)
+>
+> | 版本 | 命令格式 | 状态 |
+> |------|---------|------|
+> | V2 (推荐) | `docker compose` | ✅ 内置在 Docker 中 |
+> | V1 (已弃用) | `docker-compose` | ❌ 需单独安装 |
+>
+> 如果你使用的是 V1,请将命令中的 `docker compose` 替换为 `docker-compose`
+>
+> **检查你的版本**:
+> ```bash
+> docker compose version  # V2
+> docker-compose --version  # V1
+> ```
+
 ## 前置准备
 
 ### 安装 Docker

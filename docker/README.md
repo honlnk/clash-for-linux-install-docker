@@ -44,12 +44,19 @@ cd clash-for-linux-install/docker
 - **Dockerfile** - Docker 镜像构建文件
 - **docker-compose.yml** - Docker Compose 编排配置
 - **docker-entrypoint.sh** - 容器入口脚本
-- **docker-start.sh** - 快速启动脚本
+- **docker-start.sh** - 快速启动脚本 (自动兼容 V1/V2)
 - **.dockerignore** - 构建忽略文件
 - **.docker.env.example** - 环境变量配置模板
 - **DOCKER.md** - 详细的 Docker 部署文档
+- **DOCKER_INSTALL.md** - Docker 安装指南
+- **DOCKER_COMPOSE_VERSION.md** - Docker Compose 版本说明
 
 ## 🚀 快速开始
+
+> 📝 **Docker Compose 版本说明**: 本项目使用 Docker Compose V2 语法 (`docker compose`)
+> - 如果你看到 `Command 'docker-compose' not found`,说明你使用的是 V2 (推荐)
+> - 命令对照: `docker-compose` (V1) → `docker compose` (V2)
+> - 详细说明请参考: [Docker Compose 版本说明](DOCKER_COMPOSE_VERSION.md)
 
 > **执行目录说明**:
 > - 快速启动和 docker-compose 命令在 `docker/` 目录下执行
@@ -62,18 +69,18 @@ cd clash-for-linux-install/docker
 ./docker-start.sh
 ```
 
-### 使用 docker-compose
+### 使用 docker compose (推荐)
 
 ```bash
 # 在 docker/ 目录下执行
 # 启动
-docker-compose up -d
+docker compose up -d
 
 # 查看日志
-docker-compose logs -f clash
+docker compose logs -f clash
 
 # 停止
-docker-compose down
+docker compose down
 ```
 
 ### 手动构建

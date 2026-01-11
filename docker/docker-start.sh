@@ -54,44 +54,31 @@ check_docker() {
 
 # 检查 docker-compose 是否安装
 check_docker_compose() {
-    if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
-        print_error "docker-compose 未安装"
-        echo "请安装 docker-compose 或使用 Docker Compose V2"
-        exit 1
-    fi
-    print_info "Docker Compose 已就绪"
-}
-
-# 构建镜像
-build_image() {
-    print_info "开始构建 Docker 镜像..."
-    if $SUDO docker compose version &> /dev/null; then
-        $SUDO docker compose build
-    else
-        $SUDO docker-compose build
-    fi
-    print_info "镜像构建完成"
-}
-
-# 启动容器
-start_container() {
-    print_info "启动 Clash 容器..."
-
-    # 检查是否提供了订阅链接
-    if [ -n "$CLASH_CONFIG_URL" ]; then
-        print_info "使用订阅链接: $CLASH_CONFIG_URL"
-    else
-        print_warn "未设置订阅链接,容器启动后需要手动添加订阅"
-        print_info "提示: export CLASH_CONFIG_URL=http://your-url && ./docker-start.sh"
+    # 优先检查 Docker Compose V2 (内置插件)
+    if $SUDO docker compose version &> /dev/null 2>&1; then
+        print_info "Docker Compose V2 已就绪: $($SUDO docker compose version --short 2>/dev/null)"
+        return 0
     fi
 
-    if $SUDO docker compose version &> /dev/null; then
-        $SUDO docker compose up -d
-    else
-        $SUDO docker-compose up -d
+    # 回退到 Docker Compose V1
+    if command -v docker-compose &> /dev/null; then
+        print_warn "检测到 Docker Compose V1 (已弃用)"
+        print_info "建议升级到 Docker Compose V2"
+        return 0
     fi
 
-    print_info "容器启动成功"
+    # 都没有安装
+    print_error "未找到 Docker Compose"
+    echo ""
+    echo "请选择以下方式之一安装:"
+    echo "  1. 推荐方式: 安装 Docker Compose V2 (已包含在 Docker 中)"
+    echo "     检查 Docker 版本: $SUDO docker --version"
+    echo "     使用 Compose V2: $SUDO docker compose version"
+    echo ""
+    echo "  2. 或者安装 V1 (不推荐):"
+    echo "     sudo apt install docker-compose"
+    echo ""
+    exit 1
 }
 
 # 显示访问信息
@@ -106,10 +93,21 @@ show_access_info() {
     echo "DNS 端口: 1053"
     echo ""
     echo "常用命令:"
-    echo "  查看日志: docker compose logs -f clash"
-    echo "  查看状态: docker exec clash clashstatus"
-    echo "  添加订阅: docker exec clash clashsub add <url>"
-    echo "  进入容器: docker exec -it clash bash"
+
+    # 根据可用的 Compose 版本显示不同的命令
+    if $SUDO docker compose version &> /dev/null 2>&1; then
+        echo "  查看日志: $SUDO docker compose logs -f clash"
+        echo "  停止容器: $SUDO docker compose down"
+        echo "  重启容器: $SUDO docker compose restart"
+    else
+        echo "  查看日志: docker-compose logs -f clash"
+        echo "  停止容器: docker-compose down"
+        echo "  重启容器: docker-compose restart"
+    fi
+
+    echo "  查看状态: $SUDO docker exec clash clashstatus"
+    echo "  添加订阅: $SUDO docker exec clash clashsub add <url>"
+    echo "  进入容器: $SUDO docker exec -it clash bash"
     echo ""
     echo "=========================================="
 }

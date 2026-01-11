@@ -9,7 +9,7 @@
     "description": "容器启动入口脚本"
   },
   "docker/docker-start.sh": {
-    "description": "Docker 快速启动脚本"
+    "description": "Docker 快速启动脚本(自动兼容V1/V2)"
   },
   "docker/.dockerignore": {
     "description": "Docker 构建忽略文件"
@@ -22,6 +22,9 @@
   },
   "docker/DOCKER_INSTALL.md": {
     "description": "Docker 安装指南(Ubuntu/Debian/CentOS/RHEL)"
+  },
+  "docker/DOCKER_COMPOSE_VERSION.md": {
+    "description": "Docker Compose V1/V2 版本说明和命令对照"
   },
   "docker/README.md": {
     "description": "Docker 目录说明文档"
