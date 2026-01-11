@@ -17,6 +17,8 @@
 
 ## 🚀 一键安装
 
+### 方式一: 直接安装 (推荐)
+
 在终端中执行以下命令即可完成安装：
 
 ```bash
@@ -28,6 +30,20 @@ git clone --branch master --depth 1 https://gh-proxy.org/https://github.com/nelv
 - 上述命令使用了[加速前缀](https://gh-proxy.org/)，如失效可更换其他[可用链接](https://ghproxy.link/)。
 - 可通过 `.env` 文件或脚本参数自定义安装选项。
 - 没有订阅？[click me](https://次元.net/auth/register?code=oUbI)
+
+### 方式二: Docker 部署
+
+使用 Docker 可以快速部署 Clash,无需修改系统环境:
+
+```bash
+# 快速启动
+cd docker && ./docker-start.sh
+
+# 或使用 docker-compose
+cd docker && docker-compose up -d
+```
+
+详细文档请参考 [docker/DOCKER.md](docker/DOCKER.md)
 
 ## ⌨️ 命令一览
 

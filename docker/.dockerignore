@@ -1,0 +1,39 @@
+# Git 文件
+.git
+.gitignore
+.gitattributes
+
+# 文档
+README.md
+CLAUDE.md
+LICENSE
+docs/
+
+# CI/CD
+.github/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 日志和临时文件
+*.log
+*.tmp
+
+# Docker 相关
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# 已构建的二进制和缓存
+resources/zip/*.gz
+resources/zip/*.tar
+resources/zip/*.zip
+
+# 本地配置(保留模板)
+.env.local
+folder-alias.json
+private-folder-alias.json
