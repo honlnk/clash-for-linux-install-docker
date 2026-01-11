@@ -42,8 +42,10 @@ cd clash-for-linux-install/docker
 ## 📁 文件说明
 
 **核心文件**:
-- **Dockerfile** - Docker 镜像构建文件
-- **docker-compose.yml** - Docker Compose 编排配置
+- **Dockerfile** - Docker 镜像构建文件(标准版)
+- **Dockerfile.china** - Docker 镜像构建文件(国内网络优化版)
+- **docker-compose.yml** - Docker Compose 编排配置(标准版)
+- **docker-compose.china.yml** - Docker Compose 编排配置(国内网络优化版)
 
 **脚本文件**:
 - **docker-start.sh** - ⭐ 快速启动脚本 (用户在宿主机上运行)
@@ -72,24 +74,27 @@ cd clash-for-linux-install/docker
 > - 命令对照: `docker-compose` (V1) → `docker compose` (V2)
 > - 详细说明请参考: [Docker Compose 版本说明](DOCKER_COMPOSE_VERSION.md)
 
-> ⚠️ **国内用户重要提示**: 如果你在中国大陆,首次构建镜像时可能会遇到网络超时问题:
-> ```
-> failed to solve: DeadlineExceeded: ubuntu:22.04: failed to resolve source metadata
-> ```
+> ⚠️ **国内用户重要提示**:
 >
-> **解决方案** (二选一):
+> 脚本会**自动检测网络环境**:
+> - ✅ 如果国际网络畅通 → 使用标准 `docker-compose.yml`
+> - ⚠️ 如果网络受限 → 自动切换到 `docker-compose.china.yml`(国内优化版)
 >
-> **方式一: 配置 Docker 镜像加速器** (推荐)
+> **国内优化版**特点:
+> - 使用阿里云 Ubuntu 基础镜像
+> - 使用阿里云 APT 软件源
+> - 自动配置 GitHub 代理加速下载
+>
+> 如果自动检测失败,你仍然遇到网络问题,可以:
+>
+> **方案一: 配置 Docker 镜像加速器** (可选)
 > ```bash
-> # 在 docker/ 目录下执行
 > ./docker-configure-mirror.sh
 > ```
 >
-> **方式二: 先配置代理,再构建**
+> **方案二: 手动指定使用国内版**
 > ```bash
-> # 如果已有其他代理工具
-> export http_proxy=http://your-proxy:port
-> export https_proxy=http://your-proxy:port
+> export COMPOSE_FILE=china  # 强制使用国内优化版
 > ./docker-start.sh
 > ```
 

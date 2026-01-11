@@ -1,9 +1,15 @@
 {
   "docker/Dockerfile": {
-    "description": "Docker 镜像构建文件"
+    "description": "Docker 镜像构建文件(标准版)"
+  },
+  "docker/Dockerfile.china": {
+    "description": "Docker 镜像构建文件(国内网络优化版,使用阿里云镜像)"
   },
   "docker/docker-compose.yml": {
-    "description": "Docker Compose 编排配置"
+    "description": "Docker Compose 编排配置(标准版)"
+  },
+  "docker/docker-compose.china.yml": {
+    "description": "Docker Compose 编排配置(国内网络优化版)"
   },
   "docker/docker-entrypoint.sh": {
     "description": "容器启动入口脚本"

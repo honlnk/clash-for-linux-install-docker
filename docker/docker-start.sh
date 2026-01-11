@@ -8,6 +8,7 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 打印带颜色的消息
@@ -21,6 +22,26 @@ print_warn() {
 
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
+}
+
+print_step() {
+    echo -e "${BLUE}[STEP]${NC} $1"
+}
+
+# 检测网络环境,选择合适的构建方式
+detect_network_env() {
+    print_step "检测网络环境..."
+
+    # 尝试连接 Docker Hub
+    if timeout 5 curl -s --head https://registry-1.docker.io/v2/ > /dev/null 2>&1; then
+        print_info "✅ 国际网络畅通,使用官方 Docker 镜像"
+        COMPOSE_FILE="docker-compose.yml"
+        return 0
+    else
+        print_warn "⚠️  国际网络受限,将使用国内镜像优化版本"
+        COMPOSE_FILE="docker-compose.china.yml"
+        return 1
+    fi
 }
 
 # 检测是否需要 sudo
@@ -84,13 +105,14 @@ check_docker_compose() {
 # 构建镜像
 build_image() {
     print_info "开始构建 Docker 镜像..."
+    print_info "使用配置文件: $COMPOSE_FILE"
 
     # 优先使用 Docker Compose V2
     if $SUDO docker compose version &> /dev/null 2>&1; then
-        $SUDO docker compose build
+        $SUDO docker compose -f $COMPOSE_FILE build
     else
         # 回退到 V1
-        docker-compose build
+        docker-compose -f $COMPOSE_FILE build
     fi
 
     print_info "镜像构建完成"
@@ -110,10 +132,10 @@ start_container() {
 
     # 优先使用 Docker Compose V2
     if $SUDO docker compose version &> /dev/null 2>&1; then
-        $SUDO docker compose up -d
+        $SUDO docker compose -f $COMPOSE_FILE up -d
     else
         # 回退到 V1
-        docker-compose up -d
+        docker-compose -f $COMPOSE_FILE up -d
     fi
 
     print_info "容器启动成功"
@@ -134,13 +156,13 @@ show_access_info() {
 
     # 根据可用的 Compose 版本显示不同的命令
     if $SUDO docker compose version &> /dev/null 2>&1; then
-        echo "  查看日志: $SUDO docker compose logs -f clash"
-        echo "  停止容器: $SUDO docker compose down"
-        echo "  重启容器: $SUDO docker compose restart"
+        echo "  查看日志: $SUDO docker compose -f $COMPOSE_FILE logs -f clash"
+        echo "  停止容器: $SUDO docker compose -f $COMPOSE_FILE down"
+        echo "  重启容器: $SUDO docker compose -f $COMPOSE_FILE restart"
     else
-        echo "  查看日志: docker-compose logs -f clash"
-        echo "  停止容器: docker-compose down"
-        echo "  重启容器: docker-compose restart"
+        echo "  查看日志: docker-compose -f $COMPOSE_FILE logs -f clash"
+        echo "  停止容器: docker-compose -f $COMPOSE_FILE down"
+        echo "  重启容器: docker-compose -f $COMPOSE_FILE restart"
     fi
 
     echo "  查看状态: $SUDO docker exec clash clashstatus"
@@ -155,13 +177,14 @@ main() {
     echo "😼 Clash Docker 快速启动脚本"
     echo ""
 
+    detect_network_env
     check_docker
     check_docker_compose
     build_image
     start_container
     show_access_info
 
-    print_info "完成! 使用 'docker compose logs -f clash' 查看日志"
+    print_info "完成! 使用 '$SUDO docker compose -f $COMPOSE_FILE logs -f clash' 查看日志"
 }
 
 # 执行主流程

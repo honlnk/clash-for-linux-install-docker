@@ -73,17 +73,29 @@ cd clash-for-linux-install/docker
 
 ## 快速开始
 
-> ⚠️ **国内用户重要提示**: 如果你在中国大陆,首次构建镜像时可能会遇到网络超时问题:
-> ```
-> failed to solve: DeadlineExceeded: ubuntu:22.04: failed to resolve source metadata
-> ```
+> ⚠️ **国内用户重要提示**:
 >
-> **解决方案**: 先配置 Docker 镜像加速器:
+> `docker-start.sh` 脚本会**自动检测网络环境**并选择合适的构建方式:
+> - ✅ 如果国际网络畅通 → 使用 `docker-compose.yml` (标准版)
+> - ⚠️ 如果网络受限 → 自动切换到 `docker-compose.china.yml` (国内优化版)
+>
+> **国内优化版**特点:
+> - 使用阿里云 Ubuntu 基础镜像 (`registry.cn-hangzhou.aliyuncs.com/library/ubuntu:22.04`)
+> - 使用阿里云 APT 软件源加速依赖安装
+> - 自动配置 GitHub 代理 (`https://gh-proxy.org`) 加速内核下载
+>
+> 如果自动检测失败,你仍然遇到网络问题:
+>
+> **方案一**: 配置 Docker 镜像加速器 (可选)
 > ```bash
-> # 在 docker/ 目录下执行
 > ./docker-configure-mirror.sh
 > ```
-> 配置完成后重新运行启动脚本即可。
+>
+> **方案二**: 手动强制使用国内版
+> ```bash
+> # 编辑 docker-start.sh,修改 detect_network_env 函数
+> # 将 COMPOSE_FILE 强制设为 "docker-compose.china.yml"
+> ```
 
 ### 方式一: 使用快速启动脚本 (⭐ 最推荐)
 
