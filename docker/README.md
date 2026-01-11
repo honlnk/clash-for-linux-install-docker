@@ -2,61 +2,15 @@
 
 本目录包含 Clash 项目的 Docker 部署相关文件。
 
-## 🔧 前置准备
-
-### 安装 Docker
-
-如果你的服务器还没有安装 Docker,请先查看 **[Docker 安装指南](DOCKER_INSTALL.md)**。
-
-该指南包含:
-- ✅ Ubuntu/Debian/CentOS/RHEL 系统安装步骤
-- ✅ 安装验证方法
-- ✅ 常见问题解决方案
-- ✅ 国内用户镜像加速配置
-
-## 🌐 获取项目代码
-
-**如果你还没有项目代码**,可以先克隆仓库。本项目提供了多种克隆方式:
-
-**方式一: 使用 Gitee 镜像 (推荐国内用户)**
-
-```bash
-git clone --branch master --depth 1 https://gitee.com/honlnk/clash-for-linux-install-docker.git
-cd clash-for-linux-install-docker/docker
-```
-
-**方式二: 使用 GitHub 加速代理**
-
-```bash
-git clone --branch master --depth 1 https://gh-proxy.org/https://github.com/nelvko/clash-for-linux-install.git
-cd clash-for-linux-install/docker
-```
-
-**方式三: 直接克隆 GitHub**
-
-```bash
-git clone --branch master --depth 1 https://github.com/nelvko/clash-for-linux-install.git
-cd clash-for-linux-install/docker
-```
-
 ## 📁 文件说明
 
 **核心文件**:
-- **Dockerfile** - Docker 镜像构建文件(标准版)
-- **Dockerfile.china** - Docker 镜像构建文件(国内网络优化版)
-- **docker-compose.yml** - Docker Compose 编排配置(标准版)
-- **docker-compose.china.yml** - Docker Compose 编排配置(国内网络优化版)
+- **Dockerfile** - Docker 镜像构建文件
+- **docker-compose.yml** - Docker Compose 编排配置
 
 **脚本文件**:
-- **docker-start.sh** - ⭐ 快速启动脚本 (用户在宿主机上运行)
-  - 作用: 检查环境、构建镜像、启动容器
-  - 使用: `./docker-start.sh`
-- **docker-configure-mirror.sh** - Docker 镜像加速器配置脚本
-  - 作用: 配置国内 Docker 镜像加速器,解决拉取镜像慢的问题
-  - 使用: `./docker-configure-mirror.sh`
-- **docker-entrypoint.sh** - 容器入口脚本 (容器内部自动执行)
-  - 作用: 初始化配置、启动 Clash、保持容器运行
-  - 执行: Docker 启动容器时自动调用
+- **docker-start.sh** - ⭐ 快速启动脚本 (推荐使用)
+- **docker-entrypoint.sh** - 容器入口脚本
 
 **配置文件**:
 - **.dockerignore** - 构建忽略文件
@@ -64,139 +18,40 @@ cd clash-for-linux-install/docker
 
 **文档文件**:
 - **DOCKER.md** - 详细的 Docker 部署文档
-- **DOCKER_INSTALL.md** - Docker 安装指南
-- **DOCKER_COMPOSE_VERSION.md** - Docker Compose 版本说明
+- **README.md** - 本文件
 
 ## 🚀 快速开始
 
-> 📝 **Docker Compose 版本说明**: 本项目使用 Docker Compose V2 语法 (`docker compose`)
-> - 如果你看到 `Command 'docker-compose' not found`,说明你使用的是 V2 (推荐)
-> - 命令对照: `docker-compose` (V1) → `docker compose` (V2)
-> - 详细说明请参考: [Docker Compose 版本说明](DOCKER_COMPOSE_VERSION.md)
+### 前置要求
 
-> ⚠️ **国内用户重要提示**:
->
-> 脚本会**自动检测网络环境**:
-> - ✅ 如果国际网络畅通 → 使用标准 `docker-compose.yml`
-> - ⚠️ 如果网络受限 → 自动切换到 `docker-compose.china.yml`(国内优化版)
->
-> **国内优化版**特点:
-> - 使用网易公开 Ubuntu 基础镜像(无需登录)
-> - 使用中科大 APT 软件源
-> - 自动配置 GitHub 代理加速下载
->
-> 如果自动检测失败,你仍然遇到网络问题,可以:
->
-> **方案一: 配置 Docker 镜像加速器** (可选)
-> ```bash
-> ./docker-configure-mirror.sh
-> ```
->
-> **方案二: 手动指定使用国内版**
-> ```bash
-> export COMPOSE_FILE=china  # 强制使用国内优化版
-> ./docker-start.sh
-> ```
+- Docker 已安装
+- Docker Compose V2 或 V1
 
-### 方式一: 使用快速启动脚本 (⭐ 最推荐)
-
-**为什么推荐这种方式?**
-- ✅ **自动检测并使用 sudo** - 无需手动添加 sudo
-- ✅ **自动兼容 V1/V2** - 无论哪个版本都能正常运行
-- ✅ **一键完成所有操作** - 检查环境 → 构建镜像 → 启动容器
-- ✅ **友好的错误提示** - 遇到问题会给出解决方案
-- ✅ **适合新手** - 不需要记住复杂的 docker 命令
+### 使用快速启动脚本 (推荐)
 
 ```bash
-# 在 docker/ 目录下执行
+cd docker
 ./docker-start.sh
 ```
 
-**脚本会自动处理**:
-1. 检查 Docker 是否安装
-2. 检查 Docker Compose 版本 (V1/V2)
-3. 检测权限问题并自动使用 sudo
-4. 构建镜像
-5. 启动容器
-6. 显示访问信息和管理命令
+脚本会自动:
+- 检查 Docker 和 Docker Compose
+- 构建镜像
+- 启动容器
+- 显示访问信息
 
-**示例输出**:
-```
-😼 Clash Docker 快速启动脚本
-
-[INFO] Docker 已安装: Docker version 27.0.1
-[WARN] 当前用户没有 docker 权限,将自动使用 sudo
-[INFO] Docker Compose V2 已就绪: v5.0.1
-[INFO] 开始构建 Docker 镜像...
-...
-[INFO] 容器启动成功
-
-==========================================
-           😼 Clash 已启动
-==========================================
-
-Web 控制台: http://localhost:9090/ui
-代理端口: 7890 (HTTP/SOCKS5)
-DNS 端口: 1053
-
-常用命令:
-  查看日志: sudo docker compose logs -f clash
-  查看状态: sudo docker exec clash clashstatus
-  添加订阅: sudo docker exec clash clashsub add <url>
-==========================================
-```
-
-### 方式二: 手动使用 docker compose
-
-如果你更喜欢手动控制,可以直接使用 docker compose 命令:
-
-> **执行目录说明**:
-> - 快速启动和 docker-compose 命令在 `docker/` 目录下执行
-> - 手动构建命令在 `项目根目录` 下执行
-
-> **⚠️ 注意**: 如果遇到权限错误,需要在命令前加 `sudo`
+### 手动启动
 
 ```bash
-# 在 docker/ 目录下执行
-# 启动
-sudo docker compose up -d
-
-# 查看日志
-sudo docker compose logs -f clash
-
-# 停止
-sudo docker compose down
+cd docker
+docker compose up -d
 ```
-
-### 方式三: 手动构建
-
-```bash
-# 在项目根目录下执行
-# 构建镜像
-docker build -f docker/Dockerfile -t clash-for-linux:latest .
-
-# 运行容器
-docker run -d \
-  --name clash \
-  --cap-add=NET_ADMIN \
-  --cap-add=NET_RAW \
-  -p 7890:7890 \
-  -p 9090:9090 \
-  clash-for-linux:latest
-```
-
-## 📖 详细文档
-
-完整的部署指南请参考 [DOCKER.md](DOCKER.md)
 
 ## 🔧 配置
 
-> **执行目录**: `docker/`
-
-复制 `.docker.env.example` 为 `.env` 并修改配置:
+复制 `.docker.env.example` 为 `.env` 并修改:
 
 ```bash
-# 在 docker/ 目录下执行
 cp .docker.env.example .env
 vim .env
 ```
@@ -218,11 +73,15 @@ vim .env
 docker exec clash clashstatus
 
 # 添加订阅
-docker exec -it clash clashsub add <订阅链接>
+docker exec clash clashsub add <订阅链接>
 
 # 查看日志
-docker logs -f clash
+docker compose logs -f clash
 
-# 进入容器
-docker exec -it clash bash
+# 停止容器
+docker compose down
 ```
+
+## 📖 详细文档
+
+完整的部署指南请参考 [DOCKER.md](DOCKER.md)

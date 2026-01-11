@@ -1,24 +1,15 @@
 {
   "docker/Dockerfile": {
-    "description": "Docker 镜像构建文件(标准版)"
-  },
-  "docker/Dockerfile.china": {
-    "description": "Docker 镜像构建文件(国内网络优化版,使用网易镜像和中科大软件源)"
+    "description": "Docker 镜像构建文件"
   },
   "docker/docker-compose.yml": {
-    "description": "Docker Compose 编排配置(标准版)"
-  },
-  "docker/docker-compose.china.yml": {
-    "description": "Docker Compose 编排配置(国内网络优化版)"
+    "description": "Docker Compose 编排配置"
   },
   "docker/docker-entrypoint.sh": {
     "description": "容器启动入口脚本"
   },
   "docker/docker-start.sh": {
-    "description": "Docker 快速启动脚本(自动兼容V1/V2)"
-  },
-  "docker/docker-configure-mirror.sh": {
-    "description": "Docker 镜像加速器配置脚本(解决国内拉取镜像慢的问题)"
+    "description": "Docker 快速启动脚本(自动兼容V1/V2,自动检测sudo)"
   },
   "docker/.dockerignore": {
     "description": "Docker 构建忽略文件"
@@ -28,12 +19,6 @@
   },
   "docker/DOCKER.md": {
     "description": "Docker 部署详细指南"
-  },
-  "docker/DOCKER_INSTALL.md": {
-    "description": "Docker 安装指南(Ubuntu/Debian/CentOS/RHEL)"
-  },
-  "docker/DOCKER_COMPOSE_VERSION.md": {
-    "description": "Docker Compose V1/V2 版本说明和命令对照"
   },
   "docker/README.md": {
     "description": "Docker 目录说明文档"
