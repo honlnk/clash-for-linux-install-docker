@@ -81,6 +81,44 @@ check_docker_compose() {
     exit 1
 }
 
+# 构建镜像
+build_image() {
+    print_info "开始构建 Docker 镜像..."
+
+    # 优先使用 Docker Compose V2
+    if $SUDO docker compose version &> /dev/null 2>&1; then
+        $SUDO docker compose build
+    else
+        # 回退到 V1
+        docker-compose build
+    fi
+
+    print_info "镜像构建完成"
+}
+
+# 启动容器
+start_container() {
+    print_info "启动 Clash 容器..."
+
+    # 检查是否提供了订阅链接
+    if [ -n "$CLASH_CONFIG_URL" ]; then
+        print_info "使用订阅链接: $CLASH_CONFIG_URL"
+    else
+        print_warn "未设置订阅链接,容器启动后需要手动添加订阅"
+        print_info "提示: export CLASH_CONFIG_URL=http://your-url && ./docker-start.sh"
+    fi
+
+    # 优先使用 Docker Compose V2
+    if $SUDO docker compose version &> /dev/null 2>&1; then
+        $SUDO docker compose up -d
+    else
+        # 回退到 V1
+        docker-compose up -d
+    fi
+
+    print_info "容器启动成功"
+}
+
 # 显示访问信息
 show_access_info() {
     echo ""
