@@ -83,28 +83,28 @@ mirror_choice=${mirror_choice:-1}
 # 根据选择生成配置
 case $mirror_choice in
     1)
-        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn", "https://hub-mirror.c.163.com"]}'
+        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn", "https://hub-mirror.c.163.com"], "dns": ["114.114.114.114", "8.8.8.8"]}'
         print_info "使用阿里云镜像加速器"
         ;;
     2)
-        MIRRORS='{"registry-mirrors": ["https://mirror.ccs.tencentyun.com"]}'
+        MIRRORS='{"registry-mirrors": ["https://mirror.ccs.tencentyun.com"], "dns": ["114.114.114.114", "8.8.8.8"]}'
         print_info "使用腾讯云镜像加速器"
         ;;
     3)
-        MIRRORS='{"registry-mirrors": ["https://hub-mirror.c.163.com"]}'
+        MIRRORS='{"registry-mirrors": ["https://hub-mirror.c.163.com"], "dns": ["114.114.114.114", "8.8.8.8"]}'
         print_info "使用网易云镜像加速器"
         ;;
     4)
-        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]}'
+        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"], "dns": ["114.114.114.114", "8.8.8.8"]}'
         print_info "使用中科大镜像加速器"
         ;;
     5)
-        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn", "https://hub-mirror.c.163.com", "https://mirror.ccs.tencentyun.com"]}'
+        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn", "https://hub-mirror.c.163.com", "https://mirror.ccs.tencentyun.com"], "dns": ["114.114.114.114", "8.8.8.8"]}'
         print_info "使用全部镜像加速器(自动切换)"
         ;;
     *)
         print_error "无效选项,使用默认配置"
-        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn", "https://hub-mirror.c.163.com"]}'
+        MIRRORS='{"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn", "https://hub-mirror.c.163.com"], "dns": ["114.114.114.114", "8.8.8.8"]}'
         ;;
 esac
 
