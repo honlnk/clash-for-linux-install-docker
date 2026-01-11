@@ -20,6 +20,9 @@
   "docker/DOCKER.md": {
     "description": "Docker 部署详细指南"
   },
+  "docker/DOCKER_INSTALL.md": {
+    "description": "Docker 安装指南(Ubuntu/Debian/CentOS/RHEL)"
+  },
   "docker/README.md": {
     "description": "Docker 目录说明文档"
   },

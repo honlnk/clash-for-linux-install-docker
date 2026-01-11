@@ -4,6 +4,23 @@
 
 ## 前置准备
 
+### 安装 Docker
+
+如果你的服务器还没有安装 Docker,请先阅读 **[Docker 安装指南](DOCKER_INSTALL.md)**,该指南提供了详细的安装步骤,包括:
+
+- Ubuntu/Debian 系统安装
+- CentOS/RHEL 系统安装
+- 安装验证和故障排查
+- 国内用户网络加速配置
+
+**快速检查 Docker 是否已安装**:
+```bash
+docker --version
+docker compose version
+```
+
+如果显示版本号,说明已安装,可以跳过此步骤。
+
 ### 获取项目代码
 
 如果你还没有项目代码,需要先克隆仓库。本项目提供了多种克隆方式:

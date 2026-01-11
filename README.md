@@ -35,7 +35,11 @@ git clone --branch master --depth 1 https://gh-proxy.org/https://github.com/nelv
 
 使用 Docker 可以快速部署 Clash,无需修改系统环境:
 
-> **🌐 国内用户提示**: 如果你的服务器在国内,推荐使用 Gitee 镜像仓库:
+> **⚠️ 前置要求**: 你的服务器需要先安装 Docker。如果还没有安装,请查看 [Docker 安装指南](docker/DOCKER_INSTALL.md)。
+>
+> **🌐 国内用户提示**:
+> - **克隆代码**: 推荐使用 Gitee 镜像仓库
+> - **安装 Docker**: 推荐使用[国内镜像源](docker/DOCKER_INSTALL.md#%E5%9B%BD%E5%86%85%E7%94%A8%E6%88%B7%E7%89%B9%E5%88%AB%E6%8F%90%E7%A4%BA) (清华/阿里云/中科大)
 > ```bash
 > git clone --branch master --depth 1 https://gitee.com/honlnk/clash-for-linux-install-docker.git
 > cd clash-for-linux-install-docker/docker
