@@ -50,8 +50,8 @@ git clone --branch master --depth 1 https://gh-proxy.org/https://github.com/nelv
 # 快速启动
 cd docker && ./docker-start.sh
 
-# 或使用 docker-compose
-cd docker && docker-compose up -d
+# 或使用 docker compose (推荐)
+cd docker && docker compose up -d
 ```
 
 **如果还没有项目代码**,选择以下方式之一克隆:

@@ -73,7 +73,7 @@ cd clash-for-linux-install/docker
 
 ## 快速开始
 
-### 方式一: 使用 docker-compose (推荐)
+### 方式一: 使用 docker compose (推荐)
 
 **执行目录**: `项目根目录/docker/`
 
@@ -92,12 +92,12 @@ cp .docker.env.example .env
 2. **构建并启动**
 ```bash
 # 在 docker 目录下执行
-docker-compose up -d
+docker compose up -d
 ```
 
 3. **查看日志**
 ```bash
-docker-compose logs -f clash
+docker compose logs -f clash
 ```
 
 4. **访问 Web 控制台**
@@ -138,7 +138,7 @@ docker logs clash
 
 ## 配置说明
 
-> **注意**: 以下配置如使用 docker-compose,在 `项目根目录/docker/` 下操作;如使用 Docker 命令,在 `项目根目录` 下操作。
+> **注意**: 以下配置如使用 docker compose,在 `项目根目录/docker/` 下操作;如使用 Docker 命令,在 `项目根目录` 下操作。
 
 ### 环境变量
 
@@ -283,14 +283,14 @@ network_mode: host
 
 ## 容器管理命令
 
-> **执行目录**: `项目根目录/docker/` (使用 docker-compose 时)
+> **执行目录**: `项目根目录/docker/` (使用 docker compose 时)
 
 ### 启动/停止/重启
 
 ```bash
-docker-compose start clash
-docker-compose stop clash
-docker-compose restart clash
+docker compose start clash
+docker compose stop clash
+docker compose restart clash
 ```
 
 ### 进入容器
@@ -309,7 +309,7 @@ docker inspect clash
 ### 删除容器
 
 ```bash
-docker-compose down
+docker compose down
 # 或
 docker stop clash && docker rm clash
 ```
@@ -318,7 +318,7 @@ docker stop clash && docker rm clash
 
 ```bash
 # 删除容器和数据卷
-docker-compose down -v
+docker compose down -v
 
 # 删除镜像
 docker rmi clash-for-linux:latest
