@@ -41,12 +41,23 @@ cd clash-for-linux-install/docker
 
 ## 📁 文件说明
 
+**核心文件**:
 - **Dockerfile** - Docker 镜像构建文件
 - **docker-compose.yml** - Docker Compose 编排配置
-- **docker-entrypoint.sh** - 容器入口脚本
-- **docker-start.sh** - 快速启动脚本 (自动兼容 V1/V2)
+
+**脚本文件**:
+- **docker-start.sh** - ⭐ 快速启动脚本 (用户在宿主机上运行)
+  - 作用: 检查环境、构建镜像、启动容器
+  - 使用: `./docker-start.sh`
+- **docker-entrypoint.sh** - 容器入口脚本 (容器内部自动执行)
+  - 作用: 初始化配置、启动 Clash、保持容器运行
+  - 执行: Docker 启动容器时自动调用
+
+**配置文件**:
 - **.dockerignore** - 构建忽略文件
 - **.docker.env.example** - 环境变量配置模板
+
+**文档文件**:
 - **DOCKER.md** - 详细的 Docker 部署文档
 - **DOCKER_INSTALL.md** - Docker 安装指南
 - **DOCKER_COMPOSE_VERSION.md** - Docker Compose 版本说明
