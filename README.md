@@ -46,11 +46,17 @@ git clone --branch master --depth 1 https://gh-proxy.org/https://github.com/nelv
 > ```
 
 **如果你已经有项目代码**:
-```bash
-# 快速启动
-cd docker && ./docker-start.sh
 
-# 或使用 docker compose (推荐)
+**方式一: 使用快速启动脚本** (⭐ 最推荐,一键完成)
+```bash
+cd docker && ./docker-start.sh
+```
+- ✅ 自动检测并使用 sudo (无需手动添加)
+- ✅ 自动兼容 V1/V2
+- ✅ 一键完成所有操作
+
+**方式二: 手动使用 docker compose**
+```bash
 cd docker && docker compose up -d
 ```
 

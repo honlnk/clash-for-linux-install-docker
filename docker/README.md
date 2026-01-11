@@ -58,32 +58,77 @@ cd clash-for-linux-install/docker
 > - 命令对照: `docker-compose` (V1) → `docker compose` (V2)
 > - 详细说明请参考: [Docker Compose 版本说明](DOCKER_COMPOSE_VERSION.md)
 
-> **执行目录说明**:
-> - 快速启动和 docker-compose 命令在 `docker/` 目录下执行
-> - 手动构建命令在 `项目根目录` 下执行
+### 方式一: 使用快速启动脚本 (⭐ 最推荐)
 
-### 使用快速启动脚本(推荐)
+**为什么推荐这种方式?**
+- ✅ **自动检测并使用 sudo** - 无需手动添加 sudo
+- ✅ **自动兼容 V1/V2** - 无论哪个版本都能正常运行
+- ✅ **一键完成所有操作** - 检查环境 → 构建镜像 → 启动容器
+- ✅ **友好的错误提示** - 遇到问题会给出解决方案
+- ✅ **适合新手** - 不需要记住复杂的 docker 命令
 
 ```bash
 # 在 docker/ 目录下执行
 ./docker-start.sh
 ```
 
-### 使用 docker compose (推荐)
+**脚本会自动处理**:
+1. 检查 Docker 是否安装
+2. 检查 Docker Compose 版本 (V1/V2)
+3. 检测权限问题并自动使用 sudo
+4. 构建镜像
+5. 启动容器
+6. 显示访问信息和管理命令
+
+**示例输出**:
+```
+😼 Clash Docker 快速启动脚本
+
+[INFO] Docker 已安装: Docker version 27.0.1
+[WARN] 当前用户没有 docker 权限,将自动使用 sudo
+[INFO] Docker Compose V2 已就绪: v5.0.1
+[INFO] 开始构建 Docker 镜像...
+...
+[INFO] 容器启动成功
+
+==========================================
+           😼 Clash 已启动
+==========================================
+
+Web 控制台: http://localhost:9090/ui
+代理端口: 7890 (HTTP/SOCKS5)
+DNS 端口: 1053
+
+常用命令:
+  查看日志: sudo docker compose logs -f clash
+  查看状态: sudo docker exec clash clashstatus
+  添加订阅: sudo docker exec clash clashsub add <url>
+==========================================
+```
+
+### 方式二: 手动使用 docker compose
+
+如果你更喜欢手动控制,可以直接使用 docker compose 命令:
+
+> **执行目录说明**:
+> - 快速启动和 docker-compose 命令在 `docker/` 目录下执行
+> - 手动构建命令在 `项目根目录` 下执行
+
+> **⚠️ 注意**: 如果遇到权限错误,需要在命令前加 `sudo`
 
 ```bash
 # 在 docker/ 目录下执行
 # 启动
-docker compose up -d
+sudo docker compose up -d
 
 # 查看日志
-docker compose logs -f clash
+sudo docker compose logs -f clash
 
 # 停止
-docker compose down
+sudo docker compose down
 ```
 
-### 手动构建
+### 方式三: 手动构建
 
 ```bash
 # 在项目根目录下执行
