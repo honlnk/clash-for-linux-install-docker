@@ -11,6 +11,9 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# 全局变量
+COMPOSE_FILE=""
+
 # 打印带颜色的消息
 print_info() {
     echo -e "${GREEN}[INFO]${NC} $1"
