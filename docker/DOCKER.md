@@ -6,12 +6,80 @@
 
 ### 安装 Docker
 
-如果你的服务器还没有安装 Docker,请先参考 Docker 官方文档进行安装:
+如果你的服务器还没有安装 Docker,推荐使用 **tech-shrimp/docker_installer** 项目。
+
+#### 方式一：一键安装（推荐国内用户）
+
+**项目地址**: https://github.com/tech-shrimp/docker_installer
+**作者**: 技术爬爬虾（Bilibili 知名科技 UP 主）
+
+该项目专门解决国内网络环境下无法安装 Docker 的问题，使用 Docker 官方安装包，每天自动同步最新版本，安全可靠。
+
+**一键安装命令**:
+
+```bash
+# GitHub 链接
+sudo curl -fsSL https://github.com/tech-shrimp/docker_installer/releases/download/latest/linux.sh | bash -s docker --mirror Aliyun
+
+# Gitee 备用链接（国内推荐）
+sudo curl -fsSL https://gitee.com/tech-shrimp/docker_installer/releases/download/latest/linux.sh | bash -s docker --mirror Aliyun
+```
+
+**启动 Docker 服务**:
+
+```bash
+sudo service docker start
+```
+
+**配置镜像加速**（解决拉取镜像慢的问题）:
+
+```bash
+sudo vi /etc/docker/daemon.json
+```
+
+添加以下内容:
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://docker.1panel.live",
+    "https://hub.rat.dev"
+  ],
+  "dns": ["114.114.114.114", "8.8.8.8"]
+}
+```
+
+重启 Docker:
+
+```bash
+sudo service docker restart
+```
+
+**验证安装**:
+
+```bash
+docker --version
+docker compose version
+sudo docker run hello-world
+```
+
+如果看到输出内容包含这段信息，就说明测试成功了：
+
+```text
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+```
+
+#### 方式二：官方安装（国际网络环境）
+
+如果你的服务器可以正常访问 Docker Hub，也可以使用官方安装方法:
 
 - Ubuntu/Debian: https://docs.docker.com/engine/install/ubuntu/
 - CentOS/RHEL: https://docs.docker.com/engine/install/centos/
 
 **快速检查**:
+
 ```bash
 docker --version
 docker compose version
@@ -22,12 +90,14 @@ docker compose version
 如果你还没有项目代码,需要先克隆仓库:
 
 **方式一: 使用 Gitee 镜像 (推荐国内用户)**
+
 ```bash
 git clone --branch master --depth 1 https://gitee.com/honlnk/clash-for-linux-install-docker.git
 cd clash-for-linux-install-docker/docker
 ```
 
 **方式二: 使用 GitHub**
+
 ```bash
 git clone --branch master --depth 1 https://github.com/nelvko/clash-for-linux-install.git
 cd clash-for-linux-install/docker
@@ -43,6 +113,7 @@ cd docker
 ```
 
 脚本会自动处理:
+
 1. 检查 Docker 和 Docker Compose
 2. 自动使用 sudo (如果需要)
 3. 构建镜像
@@ -54,22 +125,26 @@ cd docker
 **执行目录**: `docker/`
 
 1. **配置环境变量** (可选)
+
 ```bash
 cp .docker.env.example .env
 # 编辑 .env 文件,设置订阅链接
 ```
 
 2. **构建并启动**
+
 ```bash
 docker compose up -d
 ```
 
 3. **查看日志**
+
 ```bash
 docker compose logs -f clash
 ```
 
 4. **访问 Web 控制台**
+
 ```
 http://localhost:9090/ui
 ```
@@ -79,11 +154,13 @@ http://localhost:9090/ui
 **执行目录**: `项目根目录`
 
 1. **构建镜像**
+
 ```bash
 docker build -f docker/Dockerfile -t clash-for-linux:latest .
 ```
 
 2. **运行容器**
+
 ```bash
 docker run -d \
   --name clash \
@@ -101,18 +178,18 @@ docker run -d \
 
 ### 环境变量
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
+| 变量名             | 说明     | 默认值         |
+| ------------------ | -------- | -------------- |
 | `CLASH_CONFIG_URL` | 订阅链接 | 空(需手动添加) |
-| `KERNEL_NAME` | 内核选择 | mihomo |
+| `KERNEL_NAME`      | 内核选择 | mihomo         |
 
 ### 端口映射
 
-| 端口 | 说明 |
-|------|------|
+| 端口 | 说明                     |
+| ---- | ------------------------ |
 | 7890 | HTTP/SOCKS5 混合代理端口 |
-| 9090 | Web 控制台端口 |
-| 1053 | DNS 端口 |
+| 9090 | Web 控制台端口           |
+| 1053 | DNS 端口                 |
 
 ### 数据卷
 
@@ -264,11 +341,13 @@ docker run -d \
 ## 安全建议
 
 1. **设置 Web 访问密钥**
+
 ```bash
 docker exec clash clashsecret your-strong-password
 ```
 
 2. **开启 allow-lan 时设置认证**
+
 ```bash
 docker exec clash clashmixin -e
 # 修改配置:
@@ -278,6 +357,7 @@ docker exec clash clashmixin -e
 ```
 
 3. **限制端口暴露**
+
 - 如果只在本地使用,不要暴露 9090 端口到公网
 - 使用反向代理(如 Nginx)提供访问控制
 
