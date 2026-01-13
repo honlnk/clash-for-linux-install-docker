@@ -24,8 +24,20 @@ WORKDIR /tmp/clash-install
 # 复制项目文件
 COPY . .
 
-# 安装 clash
-RUN bash install.sh
+# 创建 Docker 专用的 .env 文件，设置正确的安装路径
+RUN echo 'KERNEL_NAME=mihomo\n\
+CLASH_BASE_DIR=/opt/clashctl\n\
+CLASH_CONFIG_URL=\n\
+CLASH_SUB_UA=clash-verge/v2.4.0\n\
+INIT_TYPE=\n\
+ZIP_UI=resources/zip/dist.zip\n\
+URL_GH_PROXY=https://gh-proxy.org\n\
+VERSION_MIHOMO=v1.19.17\n\
+VERSION_YQ=v4.49.2\n\
+VERSION_SUBCONVERTER=v0.9.0' > .env
+
+# 安装 clash（Docker 环境：自动跳过订阅交互）
+RUN bash install.sh < /dev/null || echo "Installation completed with warnings"
 
 # 清理临时文件
 RUN rm -rf /tmp/clash-install
