@@ -48,5 +48,21 @@ LABEL "com.clash.capabilities"="NET_ADMIN NET_RAW"
 COPY docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# 安装wrapper脚本，使docker exec能直接使用clashctl命令
+COPY docker/clashctl-wrapper.sh /usr/local/bin/clashctl-wrapper
+RUN chmod +x /usr/local/bin/clashctl-wrapper
+
+# 创建便捷命令软链接
+RUN ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashctl && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashon && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashoff && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashstatus && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashsub && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashui && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashsecret && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashmixin && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashtun && \
+    ln -sf /usr/local/bin/clashctl-wrapper /usr/local/bin/clashlog
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["start"]
