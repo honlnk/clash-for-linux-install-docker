@@ -33,11 +33,23 @@ ensure_docker_config() {
     local mixin_file="/root/clashctl/resources/mixin.yaml"
 
     # 使用 yq 确保 allow-lan 和 bind-address 配置正确
-    /root/clashctl/bin/yq eval '.allow-lan = true' -i "$mixin_file" 2>/dev/null
-    /root/clashctl/bin/yq eval '.bind-address = "*"' -i "$mixin_file" 2>/dev/null
-    /root/clashctl/bin/yq eval '.external-controller = "0.0.0.0:9090"' -i "$mixin_file" 2>/dev/null
-
-    echo "✅ Docker 配置已更新 (allow-lan: true, bind-address: *)"
+    # 如果 yq 失败（文件格式问题等），使用 sed 后备方案
+    if /root/clashctl/bin/yq eval '.allow-lan = true' -i "$mixin_file" 2>/dev/null; then
+        /root/clashctl/bin/yq eval '.bind-address = "*"' -i "$mixin_file" 2>/dev/null || true
+        /root/clashctl/bin/yq eval '.external-controller = "0.0.0.0:9090"' -i "$mixin_file" 2>/dev/null || true
+        echo "✅ Docker 配置已更新 (allow-lan: true, bind-address: *)"
+    else
+        # yq 失败的后备方案：使用 sed
+        echo "⚠️  yq 修改失败，使用 sed 后备方案..."
+        sed -i 's/allow-lan: false/allow-lan: true/' "$mixin_file" 2>/dev/null || true
+        if ! grep -q "allow-lan:" "$mixin_file"; then
+            echo "allow-lan: true" >> "$mixin_file"
+        fi
+        if ! grep -q "bind-address:" "$mixin_file"; then
+            echo "bind-address: \"*\"" >> "$mixin_file"
+        fi
+        echo "✅ Docker 配置已更新（使用后备方案）"
+    fi
 }
 
 # 初始化配置
