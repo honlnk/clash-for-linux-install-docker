@@ -14,11 +14,11 @@ services:
     # 端口映射
     ports:
       # HTTP/SOCKS5 代理端口
-      - "7890:7890"
+      - "7891:7890"
       # Web 控制台端口
-      - "9090:9090"
+      - "9091:9090"
       # DNS 端口
-      - "1053:1053/udp"
+      - "1054:1053/udp"
 
     # 环境变量
     environment:
@@ -30,9 +30,9 @@ services:
     # 数据卷挂载
     volumes:
       # 持久化配置文件
-      - clash-data:/opt/clashctl/resources
+      - clash-data:/root/clashctl/resources
       # 如果需要使用本地配置文件
-      # - ./config.yaml:/opt/clashctl/resources/config.yaml:ro
+      # - ./config.yaml:/root/clashctl/resources/config.yaml:ro
 
     # TUN 模式需要的权限
     cap_add:

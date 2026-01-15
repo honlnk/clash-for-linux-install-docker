@@ -3,7 +3,8 @@
 set -e
 
 # 加载 clashctl 命令
-. /opt/clashctl/scripts/cmd/clashctl.sh
+# 注意：路径必须与Dockerfile中的CLASH_BASE_DIR保持一致
+. /root/clashctl/scripts/cmd/clashctl.sh
 
 # 显示欢迎信息
 show_welcome() {
@@ -28,7 +29,7 @@ init_config() {
         clashsub add "$CLASH_CONFIG_URL" 2>/dev/null || true
 
         # 获取第一个订阅的ID
-        local first_id=$(/opt/clashctl/bin/yq '.profiles[0].id // 0' /opt/clashctl/resources/profiles.yaml 2>/dev/null)
+        local first_id=$(/root/clashctl/bin/yq '.profiles[0].id // 0' /root/clashctl/resources/profiles.yaml 2>/dev/null)
 
         if [ "$first_id" != "0" ] && [ "$first_id" != "null" ]; then
             echo "😼 使用订阅 [$first_id]"
@@ -40,28 +41,36 @@ init_config() {
 # 启动 clash
 start_clash() {
     echo "😼 启动 Clash 内核..."
-    clashon
 
-    # 等待内核启动
-    sleep 2
+    # 尝试启动内核，即使失败也不退出容器
+    if clashon 2>/dev/null; then
+        # 等待内核启动
+        sleep 2
 
-    if clashstatus >/dev/null 2>&1; then
-        echo "✅ Clash 内核启动成功!"
+        if clashstatus >/dev/null 2>&1; then
+            echo "✅ Clash 内核启动成功!"
 
-        # 显示当前密钥
-        local secret=$(/opt/clashctl/bin/yq '.secret // ""' /opt/clashctl/resources/runtime.yaml 2>/dev/null)
-        if [ -n "$secret" ]; then
-            echo "🔑 Web 访问密钥: $secret"
+            # 显示当前密钥
+            local secret=$(/root/clashctl/bin/yq '.secret // ""' /root/clashctl/resources/runtime.yaml 2>/dev/null)
+            if [ -n "$secret" ]; then
+                echo "🔑 Web 访问密钥: $secret"
+            fi
+
+            # 显示订阅信息
+            echo ""
+            clashsub ls 2>/dev/null || echo "⚠️  尚未添加订阅,请使用 docker exec 添加:"
+            echo "   docker exec -it clash clashsub add <订阅链接>"
+        else
+            echo "⚠️  Clash 内核启动失败(可能没有订阅)"
+            echo "💡 容器将继续运行，请添加订阅后手动启动："
+            echo "   docker exec -it clash clashsub add <订阅链接>"
+            echo "   docker exec -it clash clashon"
         fi
-
-        # 显示订阅信息
-        echo ""
-        clashsub ls 2>/dev/null || echo "⚠️  尚未添加订阅,请使用 docker exec 添加:"
-        echo "   docker exec -it clash clashsub add <订阅链接>"
     else
-        echo "❌ Clash 内核启动失败!"
-        echo "📋 查看日志: docker logs clash"
-        exit 1
+        echo "⚠️  Clash 内核启动失败(可能没有订阅)"
+        echo "💡 容器将继续运行，请添加订阅后手动启动："
+        echo "   docker exec -it clash clashsub add <订阅链接>"
+        echo "   docker exec -it clash clashon"
     fi
 }
 
@@ -96,7 +105,7 @@ keep_alive() {
     echo ""
 
     # 保持容器运行
-    tail -f /opt/clashctl/resources/mihomo.log 2>/dev/null || \
+    tail -f /root/clashctl/resources/mihomo.log 2>/dev/null || \
     tail -f /dev/null
 }
 

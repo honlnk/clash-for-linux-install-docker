@@ -28,10 +28,8 @@ docker-compose.yml
 Dockerfile
 .dockerignore
 
-# 已构建的二进制和缓存
-resources/zip/*.gz
-resources/zip/*.tar
-resources/zip/*.zip
+# 注意：不要排除 resources/zip/*，因为构建时需要这些文件！
+# 如果需要减小镜像体积，可以在构建后删除这些文件
 
 # 本地配置(保留模板)
 .env.local

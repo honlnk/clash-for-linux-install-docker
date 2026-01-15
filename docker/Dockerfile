@@ -4,7 +4,8 @@ FROM ubuntu:22.04
 
 # 设置环境变量,避免交互式安装
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CLASH_BASE_DIR=/opt/clashctl
+ENV CLASH_BASE_DIR=/root/clashctl
+ENV CLASH_DOCKER_MODE=1
 ENV KERNEL_NAME=mihomo
 
 # 安装基础依赖
@@ -24,14 +25,14 @@ WORKDIR /tmp/clash-install
 # 复制项目文件
 COPY . .
 
-# 安装 clash（Docker 环境跳过订阅交互）
-RUN yes "" | bash install.sh || true
+# 安装 clash（Docker 环境会自动跳过交互式配置）
+RUN bash install.sh
 
 # 清理临时文件
 RUN rm -rf /tmp/clash-install
 
 # 创建数据卷用于持久化配置
-VOLUME ["/opt/clashctl/resources"]
+VOLUME ["/root/clashctl/resources"]
 
 # 暴露常用端口
 # 7890: mixed-port (HTTP/SOCKS5)

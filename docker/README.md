@@ -47,6 +47,26 @@ cd docker
 docker compose up -d
 ```
 
+### ⚠️ 重要说明
+
+容器启动后**不会自动启动Clash内核**，需要先添加订阅：
+
+```bash
+# 1. 添加订阅（必须）
+docker exec -it clash clashsub add <你的订阅链接>
+
+# 2. 使用订阅
+docker exec -it clash clashsub use 1
+
+# 3. 启动Clash内核
+docker exec -it clash clashon
+
+# 4. 查看状态
+docker exec -it clash clashstatus
+```
+
+**原因**: Docker环境跳过了交互式订阅配置，容器启动时等待用户手动添加订阅。这是正常行为，不是错误！
+
 ## 🔧 配置
 
 复制 `.docker.env.example` 为 `.env` 并修改:
@@ -62,9 +82,11 @@ vim .env
 
 ## 🌐 访问服务
 
-- **Web 控制台**: http://localhost:9090/ui
-- **代理端口**: localhost:7890
-- **DNS 端口**: localhost:1053
+- **Web 控制台**: http://localhost:9091/ui
+- **代理端口**: localhost:7891 (HTTP/SOCKS5)
+- **DNS 端口**: localhost:1054
+
+> **注意**: 端口已调整为 9091/7891/1054，避免与其他服务冲突。如需修改，请编辑 `docker-compose.yml`。
 
 ## 💡 常用命令
 

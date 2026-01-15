@@ -146,7 +146,7 @@ docker compose logs -f clash
 4. **访问 Web 控制台**
 
 ```
-http://localhost:9090/ui
+http://localhost:9091/ui
 ```
 
 ### 方式三: 使用 Docker 命令
@@ -167,10 +167,10 @@ docker run -d \
   --restart unless-stopped \
   --cap-add=NET_ADMIN \
   --cap-add=NET_RAW \
-  -p 7890:7890 \
-  -p 9090:9090 \
-  -p 1053:1053/udp \
-  -v clash-data:/opt/clashctl/resources \
+  -p 7891:7890 \
+  -p 9091:9090 \
+  -p 1054:1053/udp \
+  -v clash-data:/root/clashctl/resources \
   clash-for-linux:latest
 ```
 
@@ -185,15 +185,19 @@ docker run -d \
 
 ### 端口映射
 
-| 端口 | 说明                     |
-| ---- | ------------------------ |
-| 7890 | HTTP/SOCKS5 混合代理端口 |
-| 9090 | Web 控制台端口           |
-| 1053 | DNS 端口                 |
+| 宿主机端口 | 容器端口 | 说明                     |
+| --------- | -------- | ------------------------ |
+| 7891 | 7890 | HTTP/SOCKS5 混合代理端口 |
+| 9091 | 9090 | Web 控制台端口           |
+| 1054 | 1053 | DNS 端口                 |
+
+> **注意**: 宿主机端口已调整为 7891/9091/1054，避免与其他服务冲突。
 
 ### 数据卷
 
-- `/opt/clashctl/resources` - 配置文件持久化目录
+- `/root/clashctl/resources` - 配置文件持久化目录
+
+> **说明**: 安装路径从 `/opt/clashctl` 更改为 `/root/clashctl`，确保环境一致性。
 
 ### 权限要求
 
@@ -334,7 +338,7 @@ docker run -d \
   --cap-add=NET_ADMIN \
   --cap-add=NET_RAW \
   --network host \
-  -v clash-data:/opt/clashctl/resources \
+  -v clash-data:/root/clashctl/resources \
   clash-for-linux:latest
 ```
 
@@ -358,7 +362,7 @@ docker exec clash clashmixin -e
 
 3. **限制端口暴露**
 
-- 如果只在本地使用,不要暴露 9090 端口到公网
+- 如果只在本地使用,不要暴露 9091 端口到公网
 - 使用反向代理(如 Nginx)提供访问控制
 
 ## 故障排查
@@ -396,7 +400,7 @@ docker ps | grep clash
 docker exec clash clashsecret
 
 # 测试连接
-curl http://localhost:9090/ui
+curl http://localhost:9091/ui
 ```
 
 ## 参考链接
