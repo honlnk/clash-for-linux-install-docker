@@ -14,11 +14,30 @@ show_welcome() {
 ║═══════════════════════════════════════════════║
 ║                                               ║
 ║  Web 控制台: http://localhost:9090/ui         ║
+║  (宿主机访问: http://localhost:9091/ui)       ║
+║                                               ║
 ║  代理端口: 7890 (HTTP/SOCKS5)                 ║
+║  (宿主机访问: localhost:7891)                 ║
+║                                               ║
 ║  DNS 端口: 1053                               ║
+║  (宿主机访问: localhost:1054)                 ║
 ║                                               ║
 ╚═══════════════════════════════════════════════╝
 EOF
+}
+
+# 确保 Docker 配置正确
+ensure_docker_config() {
+    echo "🔧 检查 Docker 配置..."
+
+    local mixin_file="/root/clashctl/resources/mixin.yaml"
+
+    # 使用 yq 确保 allow-lan 和 bind-address 配置正确
+    /root/clashctl/bin/yq eval '.allow-lan = true' -i "$mixin_file" 2>/dev/null
+    /root/clashctl/bin/yq eval '.bind-address = "*"' -i "$mixin_file" 2>/dev/null
+    /root/clashctl/bin/yq eval '.external-controller = "0.0.0.0:9090"' -i "$mixin_file" 2>/dev/null
+
+    echo "✅ Docker 配置已更新 (allow-lan: true, bind-address: *)"
 }
 
 # 初始化配置
@@ -114,6 +133,7 @@ main() {
     case "$1" in
         start)
             show_welcome
+            ensure_docker_config
             init_config
             start_clash
             keep_alive
